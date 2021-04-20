@@ -1,10 +1,15 @@
 package main
 
+/**
+  顶层err输出具体的err信息 包括上下文，栈信息等
+  sql.ErrNoRows 属于底层err 是最接近err产生的地方，该处的上下文信息应该是最全的，最直接的，应最大包装信息返回给上一层调用者
+  在产生ErrNoRows后进行包装返回上层，在最高层进行err信息和栈信息的打印
+*/
 import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	xerrors "github.com/pkg/errors"
+	terrors "github.com/pkg/errors"
 	"os"
 )
 
@@ -52,7 +57,7 @@ func main() {
 func query(id int) (*user, error) {
 	err := db.QueryRow("select * from user_info where uid=?", id).Scan(&u.id, &u.name, &u.departname, &u.created)
 	if err != nil {
-		return nil, xerrors.Wrapf(err, fmt.Sprintf("id:%d 查询错误", id))
+		return nil, terrors.Wrapf(err, fmt.Sprintf("id:%d 查询错误", id))
 	}
 	return &u, nil
 }
