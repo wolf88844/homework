@@ -46,7 +46,7 @@ func main() {
 	//查询
 	u, err := query(id)
 	if err != nil {
-		fmt.Printf("%+v\n", err)
+		fmt.Printf("FAIL:\n %T\n %+v\n", terrors.Cause(err), err)
 		os.Exit(0)
 	}
 
@@ -57,7 +57,7 @@ func main() {
 func query(id int) (*user, error) {
 	err := db.QueryRow("select * from user_info where uid=?", id).Scan(&u.id, &u.name, &u.departname, &u.created)
 	if err != nil {
-		return nil, terrors.Wrapf(err, fmt.Sprintf("id:%d 查询错误", id))
+		return nil, terrors.Wrapf(err, "select * from user_info where uid=%d 查询错误", id)
 	}
 	return &u, nil
 }
