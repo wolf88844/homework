@@ -43,7 +43,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	g, errCtx := errgroup.WithContext(ctx)
-
+	//第一个http
 	debugMux := http.NewServeMux()
 	debugMux.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
 		fmt.Fprintf(writer, "debug goruntine")
@@ -57,7 +57,7 @@ func main() {
 		fmt.Println("debug 退出")
 		return debugHttp.Stop()
 	})
-
+	//第二个http
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
 		select {
