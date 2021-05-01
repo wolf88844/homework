@@ -60,11 +60,9 @@ func main() {
 	//第二个http
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-		select {
-		case <-time.After(1 * time.Second):
-			fmt.Fprintf(writer, "时间到期")
-			cancel()
-		}
+		<-time.After(1 * time.Second)
+		fmt.Fprintf(writer, "时间到期")
+		cancel()
 	})
 	muxHttp := newServer(mux, errCtx)
 	g.Go(func() error {
